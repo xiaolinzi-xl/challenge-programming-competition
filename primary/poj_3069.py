@@ -3,6 +3,7 @@ if __name__ == '__main__':
     n = int(input().strip())
     r = int(input().strip())
     x = list(map(int, input().strip().split()))
+    x.sort()  # 刚开始的坐标不一定是有序的
     left = 0
     ans = 0
     while left < n:
