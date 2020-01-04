@@ -39,6 +39,26 @@ def knaspack_1(w_list, v_list, w_max):
     return dp[w_max]
 
 
+# 优化时间 时间复杂度为 O(n*sum(v))
+def knaspack_2(w_list, v_list, w_max):
+    v_max = sum(v_list)
+    n = len(w_list)
+    dp = [[2 << 64] * (v_max + 1) for _ in range(n + 1)]
+    for i in range(n + 1):
+        dp[i][0] = 0
+    for i in range(1, n + 1):
+        for j in range(1, v_max + 1):
+            dp[i][j] = dp[i - 1][j]
+            if j >= v_list[i - 1]:
+                dp[i][j] = min(dp[i][j],
+                               dp[i - 1][j - v_list[i - 1]] + w_list[i - 1])
+    res = -1
+    for i in range(v_max + 1):
+        if dp[n][i] <= w_max:
+            res = i
+    return res
+
+
 if __name__ == "__main__":
     w = [2, 1, 3, 2]
     v = [3, 2, 4, 2]
@@ -46,3 +66,4 @@ if __name__ == "__main__":
     print(dfs(0, w, v, w_max))
     print(knaspack(w, v, w_max))
     print(knaspack_1(w, v, w_max))
+    print(knaspack_2(w, v, w_max))
